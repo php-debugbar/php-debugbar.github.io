@@ -386,8 +386,7 @@ if (typeof(PhpDebugBar) == 'undefined') {
             this.settings = {};
 
             // Reset options
-            debugbar.options = debugbar.defaultOptions;
-            debugbar.setTheme(debugbar.options.theme);
+            debugbar.options = { ...debugbar.defaultOptions };
 
             // Reset ajax handler
             if (debugbar.ajaxHandler) {
@@ -398,6 +397,8 @@ if (typeof(PhpDebugBar) == 'undefined') {
                     debugbar.controls['__datasets'].get('widget').set('autoshow', $(this).is(':checked'));
                 }
             }
+
+            this.initialize(debugbar.options);
         },
 
         storeSetting: function(key, value) {
@@ -766,13 +767,13 @@ if (typeof(PhpDebugBar) == 'undefined') {
          * @this {DebugBar}
          */
         setHeight: function(height) {
-          var min_h = 40;
-          var max_h = $(window).innerHeight() - this.$header.height() - 10;
-          height = Math.min(height, max_h);
-          height = Math.max(height, min_h);
-          this.$body.css('height', height);
-          localStorage.setItem('phpdebugbar-height', height);
-          this.recomputeBottomOffset();
+            var min_h = 40;
+            var max_h = $(window).innerHeight() - this.$header.height() - 10;
+            height = Math.min(height, max_h);
+            height = Math.max(height, min_h);
+            this.$body.css('height', height);
+            localStorage.setItem('phpdebugbar-height', height);
+            this.recomputeBottomOffset();
         },
 
         /**
