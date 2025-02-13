@@ -8,7 +8,7 @@ Collectors provided in the `DebugBar\DataCollector` namespace.
 Provides a way to log messages (compatible with [PSR-3 logger](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md)).
 You can call the `useHtmlVarDumper()` function to use VarDumper's interactive HTML dumper for
 interactively rendering complex variables.  If you do that, you must properly render
-[inline assets](rendering.md#assets) when rendering the debug bar in addition to the normal js/css
+[inline assets](../docs/rendering.md#assets) when rendering the debug bar in addition to the normal js/css
 static assets.
 
     $c = new DebugBar\DataCollector\MessagesCollector();
@@ -88,7 +88,7 @@ If you want to see your PDO requests in the TimeDataCollector, you must add the 
 
 Collects the data of PHP's global variables.  You can call the `useHtmlVarDumper()` function to use
 VarDumper's interactive HTML dumper for rendering the variables.  If you do that, you must properly
-render [inline assets](rendering.md#assets) when rendering the debug bar in addition to the normal
+render [inline assets](../docs/rendering.md#assets) when rendering the debug bar in addition to the normal
 js/css static assets.
 
     $requestDataCollector = new DebugBar\DataCollector\RequestDataCollector();
@@ -99,7 +99,7 @@ js/css static assets.
 
 Used to display any key/value pairs array.  You can call the `useHtmlVarDumper()` function to use
 VarDumper's interactive HTML dumper for rendering the variables.  If you do that, you must properly
-render [inline assets](rendering.md#assets) when rendering the debug bar in addition to the normal
+render [inline assets](../docs/rendering.md#assets) when rendering the debug bar in addition to the normal
 js/css static assets.
 
     $data = array('foo' => 'bar');

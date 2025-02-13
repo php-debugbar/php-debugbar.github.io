@@ -16,7 +16,7 @@ CacheCache uses [Monolog](https://github.com/Seldaek/monolog) for logging,
 thus it is required to collect data.
 
 `CacheCacheCollector` subclasses `MonologCollector`, thus it can be
-[aggregated in the messages view](base_collectors.md#messages).
+[aggregated in the messages view](base.md#messages).
 
 ## Doctrine
 
@@ -45,7 +45,7 @@ Note that multiple logger can be collected:
 
     $debugbar['monolog']->addLogger($logger);
 
-`MonologCollector` can be [aggregated](base_collectors.md#messages) into the `MessagesCollector`.
+`MonologCollector` can be [aggregated](base.md#messages) into the `MessagesCollector`.
 
 ## Propel
 
