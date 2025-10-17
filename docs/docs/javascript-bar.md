@@ -40,15 +40,17 @@ a control exists using `isControl(name)`.
 Tabs can be added using the `createTab(name, widget, title)` function.
 The third argument is optional and will be computed from the name if not
 provided.
-
-    var debugbar = new PhpDebugBar.DebugBar();
-    debugbar.createTab("messages", new PhpDebugBar.Widgets.MessagesWidget());
+```js
+var debugbar = new PhpDebugBar.DebugBar();
+debugbar.createTab("messages", new PhpDebugBar.Widgets.MessagesWidget());
+```
 
 Indicators can be added using `createIndicator(name, icon, tooltip, position)`.
 Only `name` is required in this case. `icon` should be the name of a FontAwesome
 icon. `position` can either be *right* (default) or *left*.
-
-    debugbar.createIndicator("time", "cogs", "Request duration");
+```js
+debugbar.createIndicator("time", "cogs", "Request duration");
+```
 
 You may have noticed that the data to use inside these controls is not
 specified at the moment. Although it could be specified when initialized, it
@@ -61,11 +63,12 @@ should be feed into which controls. This can be done using `setDataMap(map)`
 which takes as argument an object where properties are control names. Values
 should be arrays where the first item is the property from the data set and
 the second a default value.
-
-    debugbar.setDataMap({
-        "messages": ["messages", []],
-        "time": ["time.duration_str", "0ms"]
-    });
+```js
+debugbar.setDataMap({
+    "messages": ["messages", []],
+    "time": ["time.duration_str", "0ms"]
+});
+```
 
 You can notice that nested properties can also be accessed using the dot
 notation.
@@ -92,10 +95,11 @@ Widgets should inherit from the `PhpDebugBar.Widget` class which is used
 as the base of every visual component in the debug bar.
 
 New widgets can be created using `extend()`:
-
-    var MyWidget = PhpDebugBar.Widget.extend({
-        // class properties
-    });
+```js
+var MyWidget = PhpDebugBar.Widget.extend({
+    // class properties
+});
+```
 
 The Widget class defines a `set(attr, value)` function which can be used
 to set the value of attributes.
@@ -108,23 +112,24 @@ Widgets should define a `render()` function which initializes the widget
 elements.
 
 `initialize(options)` will always be called after the constructor.
+```js
+var MyWidget = PhpDebugBar.Widget.extend({
 
-    var MyWidget = PhpDebugBar.Widget.extend({
+    tagName: 'div', // optional as 'div' is the default
 
-        tagName: 'div', // optional as 'div' is the default
+    className: 'mywidget',
 
-        className: 'mywidget',
+    render: function() {
+        this.bindAttr('data', this.$el);
+    }
 
-        render: function() {
-            this.bindAttr('data', this.$el);
-        }
+});
 
-    });
+// ----
 
-    // ----
-
-    debugbar.createTab("mytab", new MyWidget());
-    debugbar.addDataMap({"mytab": ["mydata", ""]});
+debugbar.createTab("mytab", new MyWidget());
+debugbar.addDataMap({"mytab": ["mydata", ""]});
+```
 
 Widgets for bundled data collectors are included as well as more generic
 widgets that you can build on top of. They are located in *widgets.js* in
@@ -151,23 +156,24 @@ Behind the scene, `createTab()` and `createIndicator()` use `addTab(name, tab)` 
 `addIndicator(name, indicator)`. Tabs are objects of type `PhpDebugBar.DebugBar.Tab`
 and indicators of type `PhpDebugBar.DebugBar.Indicator`. These classes subclass
 `PhpDebugBar.Widget` which makes it easy to create custom tabs or indicators.
+```js
+var LinkIndicator = PhpDebugBar.DebugBar.Indicator.extend({
 
-    var LinkIndicator = PhpDebugBar.DebugBar.Indicator.extend({
+    tagName: 'a',
 
-        tagName: 'a',
+    render: function() {
+        LinkIndicator.__super__.render.apply(this);
+        this.bindAttr('href', function(href) {
+            this.$el.attr('href', href);
+        });
+    }
 
-        render: function() {
-            LinkIndicator.__super__.render.apply(this);
-            this.bindAttr('href', function(href) {
-                this.$el.attr('href', href);
-            });
-        }
+});
 
-    });
+// ----
 
-    // ----
-
-    debugbar.addIndicator('phpdoc', new LinkIndicator({ href: 'http://doc.php.com', title: 'PHP doc' }));
+debugbar.addIndicator('phpdoc', new LinkIndicator({ href: 'http://doc.php.com', title: 'PHP doc' }));
+```
 
 ## OpenHandler
 
@@ -177,5 +183,6 @@ as only parameter a callback which expects an id and data parameter.
 
 The default implementation is `PhpDebugBar.OpenHandler` which must be use in conjunction
 with the server side `DebugBar\OpenHandler` (see previous section).
-
-    debugbar.setOpenHandler(new PhpDebugBar.OpenHandler({ url: "open.php" }));
+```js
+debugbar.setOpenHandler(new PhpDebugBar.OpenHandler({ url: "open.php" }));
+```
