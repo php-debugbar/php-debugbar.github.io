@@ -17,18 +17,19 @@ By default, collectors inheriting from `DebugBar\DataCollector\DataCollector` wi
 `DebugBarVarDumper` instance specified by the static `DataCollector::setDefaultVarDumper` function.
 This can be overridden on a per-collector basis by the non-static `DataCollector::setVarDumper`
 function.
+```php
+// Modify default options used globally by all collectors
+DataCollector::getDefaultVarDumper()->mergeClonerOptions(array(
+    'max_items' => 50,
+));
 
-    // Modify default options used globally by all collectors
-    DataCollector::getDefaultVarDumper()->mergeClonerOptions(array(
-        'max_items' => 50,
-    ));
-
-    // Modify options for a specific collector
-    $varDumper = new DebugBarVarDumper();
-    $varDumper->mergeDumperOptions(array(
-        'max_string' => 100,
-    ));
-    $collector->setVarDumper($varDumper);
+// Modify options for a specific collector
+$varDumper = new DebugBarVarDumper();
+$varDumper->mergeDumperOptions(array(
+    'max_string' => 100,
+));
+$collector->setVarDumper($varDumper);
+```
 
 VarDumper has two key classes that are used by `DebugBarVarDumper`. The options can be set using
 the `mergeClonerOptions`, `resetClonerOptions`, `mergeDumperOptions`, and `resetDumperOptions`
@@ -54,45 +55,49 @@ methods on `DebugBarVarDumper`.
 
 A collector wishing to take advantage of this feature must call the `renderVar()` function and
 return the HTML result as part of the request dataset:
+```php
+public function collectVariable($v)
+{
+    // This will clone and then dump the variable in one operation:
+    $this->variableHtml = $this->getVarDumper()->renderVar($v);
+}
 
-    public function collectVariable($v)
-    {
-        // This will clone and then dump the variable in one operation:
-        $this->variableHtml = $this->getVarDumper()->renderVar($v);
-    }
-
-    public function collect()
-    {
-        return array('variableHtml' => $this->variableHtml);
-    }
+public function collect()
+{
+    return array('variableHtml' => $this->variableHtml);
+}
+```
 
 The collector may then render the raw HTML in a Javascript widget:
-
-    if (value.variableHtml) {
-        var val = $('<span />').html(value.variableHtml).appendTo(otherElement);
-    }
+```js
+if (value.variableHtml) {
+    var val = $('<span />').html(value.variableHtml).appendTo(otherElement);
+}
+```
 
 If the collector takes advantage of the variable dumper, as shown above, then it must also
 implement the `AssetProvider` interface and include the assets of the variable dumper. This does
 not take place by default, because not all collectors will use the variable dumper.
-
-    class MyCollector extends DataCollector implements Renderable, AssetProvider
-    {
-        public function getAssets() {
-            return $this->getVarDumper()->getAssets();
-        }
+```php
+class MyCollector extends DataCollector implements Renderable, AssetProvider
+{
+    public function getAssets() {
+        return $this->getVarDumper()->getAssets();
     }
+}
+```
 
 You might want to clone a variable initially, and only dump it at a later time. This is supported by
 the `captureVar()` and `renderCapturedVar()` functions. It's also possible to render only portions
 of a cloned variable at a time.
+```php
+$testData = array('one', 'two', 'three');
+$cloned_variable = $this->getVarDumper()->captureVar($testData);
 
-    $testData = array('one', 'two', 'three');
-    $cloned_variable = $this->getVarDumper()->captureVar($testData);
-    
-    // Later, when you want to render it. Note the second parameter is $seekPath; here we specify
-    // to only render the second array element (index 1). $html will therefore only contain 'two'.
-    $html = $this->getVarDumper()->renderCapturedVar($cloned_variable, array(1));
+// Later, when you want to render it. Note the second parameter is $seekPath; here we specify
+// to only render the second array element (index 1). $html will therefore only contain 'two'.
+$html = $this->getVarDumper()->renderCapturedVar($cloned_variable, array(1));
+```
 
 ## Text formatting
 

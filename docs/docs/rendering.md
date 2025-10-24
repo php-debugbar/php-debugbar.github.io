@@ -2,8 +2,9 @@
 
 Rendering is performed using the `DebugBar\JavascriptRenderer` class. It contains
 all the useful functions to included the needed assets and generate a debug bar.
-
-    $renderer = $debugbar->getJavascriptRenderer();
+```php
+$renderer = $debugbar->getJavascriptRenderer();
+```
 
 ## Assets
 
@@ -29,28 +30,32 @@ You can define the base url of your assets using `setBaseUrl()`. This is needed
 in 99% of cases.
 
 Using `renderHead()`:
-
-    <html>
-        <head>
-            ...
-            <?php echo $renderer->renderHead() ?>
-            ...
-        </head>
+```php
+<html>
+    <head>
         ...
-    </html>
+        <?php echo $renderer->renderHead() ?>
+        ...
+    </head>
+    ...
+</html>
+```
 
 Using Assetic:
-
-    list($cssCollection, $jsCollection, $inlineHeadCollection) = $renderer->getAsseticCollection();
+```php
+list($cssCollection, $jsCollection, $inlineHeadCollection) = $renderer->getAsseticCollection();
+```
 
 Dumping the assets:
-
-    header('Content-Type: text/javascript');
-    $renderer->dumpJsAssets();
+```php
+header('Content-Type: text/javascript');
+$renderer->dumpJsAssets();
+```
 
 Retrieving the assets:
-
-    list($cssFiles, $jsFiles, $inlineCss, $inlineJs, $inlineHead) = $renderer->getAssets();
+```php
+list($cssFiles, $jsFiles, $inlineCss, $inlineJs, $inlineHead) = $renderer->getAssets();
+```
 
 Note that you can only use the debug bar assets and manage the dependencies by yourself
 using `$renderer->setIncludeVendors(false)`. Instead of false, *css* or *js* may be used
@@ -82,21 +87,23 @@ Data collectors can provide their own controls when implementing the
 `DebugBar\DataCollector\Renderable` interface as explained in the Collecting Data chapter.
 
 Thus in almost all cases, you should only have to use `render()` right away:
-
-    <html>
-        ...
-        <body>
-            <?php echo $renderer->render() ?>
-        </body>
-    </html>
+```php
+<html>
+    ...
+    <body>
+        <?php echo $renderer->render() ?>
+    </body>
+</html>
+```
 
 This will print the initialization code for the toolbar and the dataset for the request.
 When you are performing AJAX requests, you do not want to initialize a new toolbar but
 add the dataset to the existing one. You can disable initialization using `false` as
 the first argument of `render()`.
-
-    <p>my ajax content</p>
-    <?php echo $renderer->render(false) ?>
+```php
+<p>my ajax content</p>
+<?php echo $renderer->render(false) ?>
+```
 
 ### Controlling object initialization
 
@@ -110,18 +117,20 @@ the instance variable using `setVariableName()`.
 
 Let's say you have subclassed `PhpDebugBar.DebugBar` in javascript to do your own initialization.
 Your new object is called `MyDebugBar`.
-
-    $renderer->setJavascriptClass("MyDebugBar");
-    $renderer->setInitialization(JavascriptRenderer::INITIALIZE_CONSTRUCTOR);
-    // ...
-    echo $renderer->render();
+```php
+$renderer->setJavascriptClass("MyDebugBar");
+$renderer->setInitialization(JavascriptRenderer::INITIALIZE_CONSTRUCTOR);
+// ...
+echo $renderer->render();
+```
 
 This has the result of printing:
-
-    <script type="text/javascript">
-    var phpdebugbar = new MyDebugBar();
-    phpdebugbar.addDataSet({ ... });
-    </script>
+```html
+<script type="text/javascript">
+var phpdebugbar = new MyDebugBar();
+phpdebugbar.addDataSet({ ... });
+</script>
+```
 
 Using `setInitialization(0)` will only render the addDataSet part.
 
@@ -145,12 +154,13 @@ possible values:
 At least *icon* or *widget* are needed (unless *tab* or *indicator* are specified). If *widget* is
 specified, a tab will be created, otherwise an indicator. Any other options is also passed to the tab
 or indicator.
-
-    $renderer->addControl('messages', array(
-        "widget" => "PhpDebugBar.Widgets.MessagesWidget",
-        "map" => "messages",
-        "default" => "[]"
-    ));
+```php
+$renderer->addControl('messages', array(
+    "widget" => "PhpDebugBar.Widgets.MessagesWidget",
+    "map" => "messages",
+    "default" => "[]"
+));
+```
 
 You can disable a control using `disableControl($name)` and ignore any controls provided by
 a collector using `ignoreCollector($name)`.

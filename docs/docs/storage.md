@@ -2,8 +2,9 @@
 
 DebugBar supports storing collected data for later analysis.
 You'll need to set a storage handler using `setStorage()` on your `DebugBar` instance.
-
-    $debugbar->setStorage(new DebugBar\Storage\FileStorage('/path/to/dir'));
+```php
+$debugbar->setStorage(new DebugBar\Storage\FileStorage('/path/to/dir'));
+```
 
 Each time `DebugBar::collect()` is called, the data will be persisted.
 
@@ -13,20 +14,23 @@ Each time `DebugBar::collect()` is called, the data will be persisted.
 
 It will collect data as json files under the specified directory
 (which has to be writable).
-
-    $storage = new DebugBar\Storage\FileStorage($directory);
+```php
+$storage = new DebugBar\Storage\FileStorage($directory);
+```
 
 ### Redis
 
 Stores data inside a Redis hash. Uses [Predis](http://github.com/nrk/predis).
-
-    $storage = new DebugBar\Storage\RedisStorage($client);
+```php
+$storage = new DebugBar\Storage\RedisStorage($client);
+```
 
 ### PDO
 
 Stores data inside a database.
-
-    $storage = new DebugBar\Storage\PdoStorage($pdo);
+```php
+$storage = new DebugBar\Storage\PdoStorage($pdo);
+```
 
 The table name can be changed using the second argument and sql queries
 can be changed using `setSqlQueries()`.
